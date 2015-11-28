@@ -162,6 +162,11 @@ void reportAvailableMemoryForGPUImage(NSString *tag)
 #pragma mark -
 #pragma mark Managing targets
 
+/**
+ * 通知某一个filter进行处理
+ * @param target              目标filter
+ * @param inputTextureIndex   纹理的位置
+ */
 - (void)setInputFramebufferForTarget:(id<GPUImageInput>)target atIndex:(NSInteger)inputTextureIndex;
 {
     [target setInputFramebuffer:[self framebufferForOutput] atIndex:inputTextureIndex];
@@ -177,6 +182,9 @@ void reportAvailableMemoryForGPUImage(NSString *tag)
     outputFramebuffer = nil;
 }
 
+/**
+ * 通知所有target处理
+ */
 - (void)notifyTargetsAboutNewOutputTexture;
 {
     for (id<GPUImageInput> currentTarget in targets)
@@ -193,8 +201,12 @@ void reportAvailableMemoryForGPUImage(NSString *tag)
 	return [NSArray arrayWithArray:targets];
 }
 
+/**
+ * 添加本output的输出
+ */
 - (void)addTarget:(id<GPUImageInput>)newTarget;
 {
+    // 从target中得到可用的TextureIndex
     NSInteger nextAvailableTextureIndex = [newTarget nextAvailableTextureIndex];
     [self addTarget:newTarget atTextureLocation:nextAvailableTextureIndex];
     
@@ -204,6 +216,9 @@ void reportAvailableMemoryForGPUImage(NSString *tag)
     }
 }
 
+/**
+ * 在texture index上添加target
+ */
 - (void)addTarget:(id<GPUImageInput>)newTarget atTextureLocation:(NSInteger)textureLocation;
 {
     if([targets containsObject:newTarget])
@@ -213,14 +228,19 @@ void reportAvailableMemoryForGPUImage(NSString *tag)
     
     cachedMaximumOutputSize = CGSizeZero;
     runSynchronouslyOnVideoProcessingQueue(^{
+        // 设置frameBuffer到target中
         [self setInputFramebufferForTarget:newTarget atIndex:textureLocation];
         [targets addObject:newTarget];
         [targetTextureIndices addObject:[NSNumber numberWithInteger:textureLocation]];
         
+        // 需要黑白照片
         allTargetsWantMonochromeData = allTargetsWantMonochromeData && [newTarget wantsMonochromeInput];
     });
 }
 
+/**
+ * 删除target
+ */
 - (void)removeTarget:(id<GPUImageInput>)targetToRemove;
 {
     if(![targets containsObject:targetToRemove])

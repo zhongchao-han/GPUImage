@@ -10,8 +10,7 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
-    rootViewController = [[SimpleImageViewController alloc] initWithNibName:nil bundle:nil];
-    [self.window addSubview:rootViewController.view];
+    self.window.rootViewController = [[SimpleImageViewController alloc] initWithNibName:nil bundle:nil];
     
     [self.window makeKeyAndVisible];
     return YES;
