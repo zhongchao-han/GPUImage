@@ -88,6 +88,8 @@
     inputRotation = kGPUImageNoRotation;
     self.opaque = YES;
     self.hidden = NO;
+    
+    // 设置CAEAGLLayer
     CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
     eaglLayer.opaque = YES;
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
@@ -97,9 +99,11 @@
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext useImageProcessingContext];
         
+        // 直接输出纹理的sharder program
         displayProgram = [[GPUImageContext sharedImageProcessingContext] programForVertexShaderString:kGPUImageVertexShaderString fragmentShaderString:kGPUImagePassthroughFragmentShaderString];
         if (!displayProgram.initialized)
         {
+            // 设置属性
             [displayProgram addAttribute:@"position"];
             [displayProgram addAttribute:@"inputTextureCoordinate"];
             
@@ -116,14 +120,21 @@
             }
         }
         
+        // 获取attribute的index
         displayPositionAttribute = [displayProgram attributeIndex:@"position"];
         displayTextureCoordinateAttribute = [displayProgram attributeIndex:@"inputTextureCoordinate"];
+        
+        // 获取uniform的index
         displayInputTextureUniform = [displayProgram uniformIndex:@"inputImageTexture"]; // This does assume a name of "inputTexture" for the fragment shader
 
+        // 激活program
         [GPUImageContext setActiveShaderProgram:displayProgram];
+        
+        // 启用attr
         glEnableVertexAttribArray(displayPositionAttribute);
         glEnableVertexAttribArray(displayTextureCoordinateAttribute);
         
+        // 设置背景颜色
         [self setBackgroundColorRed:0.0 green:0.0 blue:0.0 alpha:1.0];
         _fillMode = kGPUImageFillModePreserveAspectRatio;
         [self createDisplayFramebuffer];

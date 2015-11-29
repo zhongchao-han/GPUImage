@@ -184,8 +184,12 @@ static void *openGLESContextQueueKey;
     return supportsFramebufferReads;
 }
 
+/**
+ * 如果大小小于texture硬件能供支持的最大大小，就等比缩小
+ */
 + (CGSize)sizeThatFitsWithinATextureForSize:(CGSize)inputSize;
 {
+    // 查询texture的最大大小
     GLint maxTextureSize = [self maximumTextureSizeForThisDevice]; 
     if ( (inputSize.width < maxTextureSize) && (inputSize.height < maxTextureSize) )
     {
@@ -243,8 +247,13 @@ static void *openGLESContextQueueKey;
     _sharegroup = sharegroup;
 }
 
+/**
+ *
+ */
 - (EAGLContext *)createContext;
 {
+    // 用API2.0创建一个渲染上下文
+    // sharegroup 是多个context的公共空间。共享textture，render buffer等。第一个context的sharegroup是0
     EAGLContext *context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2 sharegroup:_sharegroup];
     NSAssert(context != nil, @"Unable to create an OpenGL ES 2.0 context. The GPUImage framework requires OpenGL ES 2.0 support to work.");
     return context;

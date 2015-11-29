@@ -9,8 +9,10 @@
 
 @interface GPUImageFramebufferCache()
 {
-//    NSCache *framebufferCache;
+    // key : <类别lash>-<texture ID> value : framebuffer
     NSMutableDictionary *framebufferCache;
+    // 相同大小，相同texture设置的的Framebuffer为一类。
+    // key : 类别的hash value : 这个类别下Framebuffer的数量。
     NSMutableDictionary *framebufferTypeCounts;
     NSMutableArray *activeImageCaptureList; // Where framebuffers that may be lost by a filter, but which are still needed for a UIImage, etc., are stored
     id memoryWarningObserver;
@@ -99,6 +101,7 @@
             while ((framebufferFromCache == nil) && (currentTextureID >= 0))
             {
                 NSString *textureHash = [NSString stringWithFormat:@"%@-%ld", lookupHash, (long)currentTextureID];
+                // 通过最后一个Textture的index，得到检索framebuffer的key
                 framebufferFromCache = [framebufferCache objectForKey:textureHash];
                 // Test the values in the cache first, to see if they got invalidated behind our back
                 if (framebufferFromCache != nil)
@@ -111,6 +114,7 @@
             
             currentTextureID++;
             
+            // 重新设置count
             [framebufferTypeCounts setObject:[NSNumber numberWithInteger:currentTextureID] forKey:lookupHash];
             
             if (framebufferFromCache == nil)
@@ -120,6 +124,7 @@
         }
     });
 
+    // 设置framebufferFromCache在引用中
     [framebufferFromCache lock];
     return framebufferFromCache;
 }

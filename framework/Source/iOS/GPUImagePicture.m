@@ -62,6 +62,8 @@
     
     hasProcessedImage = NO;
     self.shouldSmoothlyScaleOutput = smoothlyScaleOutput;
+    // 图片更新信号,起始是可用状态
+    // 保证同时只有一个图片更新
     imageUpdateSemaphore = dispatch_semaphore_create(0);
     dispatch_semaphore_signal(imageUpdateSemaphore);
 
@@ -84,6 +86,8 @@
     {
         pixelSizeOfImage = scaledImageSizeToFitOnGPU;
         pixelSizeToUseForTexture = pixelSizeOfImage;
+        
+        // 资源宽高太大，就用core graphic重绘
         shouldRedrawUsingCoreGraphics = YES;
     }
     
@@ -93,6 +97,7 @@
         CGFloat powerClosestToWidth = ceil(log2(pixelSizeOfImage.width));
         CGFloat powerClosestToHeight = ceil(log2(pixelSizeOfImage.height));
         
+        // 转换为2的n次幂的大小
         pixelSizeToUseForTexture = CGSizeMake(pow(2.0, powerClosestToWidth), pow(2.0, powerClosestToHeight));
         
         shouldRedrawUsingCoreGraphics = YES;
@@ -106,9 +111,10 @@
         /* Check that the memory layout is compatible with GL, as we cannot use glPixelStore to
          * tell GL about the memory layout with GLES.
          */
-        if (CGImageGetBytesPerRow(newImageSource) != CGImageGetWidth(newImageSource) * 4 ||
-            CGImageGetBitsPerPixel(newImageSource) != 32 ||
-            CGImageGetBitsPerComponent(newImageSource) != 8)
+        // 保证图片格式是正确的
+        if (CGImageGetBytesPerRow(newImageSource) != CGImageGetWidth(newImageSource) * 4 || // 每个像素是否是4字节
+            CGImageGetBitsPerPixel(newImageSource) != 32 || // 每个像素是否是32bit
+            CGImageGetBitsPerComponent(newImageSource) != 8) // 每个构件是否是8bit
         {
             shouldRedrawUsingCoreGraphics = YES;
         } else {
@@ -116,6 +122,7 @@
             CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(newImageSource);
             if ((bitmapInfo & kCGBitmapFloatComponents) != 0) {
                 /* We don't support float components for use directly in GL */
+                // 如果是float component就重绘
                 shouldRedrawUsingCoreGraphics = YES;
             } else {
                 CGBitmapInfo byteOrderInfo = bitmapInfo & kCGBitmapByteOrderMask;
@@ -180,23 +187,29 @@
     //    NSLog(@"Debug, average input image red: %f, green: %f, blue: %f, alpha: %f", currentRedTotal / (CGFloat)totalNumberOfPixels, currentGreenTotal / (CGFloat)totalNumberOfPixels, currentBlueTotal / (CGFloat)totalNumberOfPixels, currentAlphaTotal / (CGFloat)totalNumberOfPixels);
     
     runSynchronouslyOnVideoProcessingQueue(^{
+        
+        // 使用图片处理上下文
         [GPUImageContext useImageProcessingContext];
         
+        // 得到可用的frame buffer
         outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:pixelSizeToUseForTexture onlyTexture:YES];
         [outputFramebuffer disableReferenceCounting];
 
+        // 绑定纹理
         glBindTexture(GL_TEXTURE_2D, [outputFramebuffer texture]);
         if (self.shouldSmoothlyScaleOutput)
         {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         }
         // no need to use self.outputTextureOptions here since pictures need this texture formats and type
+        // 导入数据到纹理
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)pixelSizeToUseForTexture.width, (int)pixelSizeToUseForTexture.height, 0, format, GL_UNSIGNED_BYTE, imageData);
         
         if (self.shouldSmoothlyScaleOutput)
         {
             glGenerateMipmap(GL_TEXTURE_2D);
         }
+        // 解除纹理的当前使用
         glBindTexture(GL_TEXTURE_2D, 0);
     });
     
@@ -249,6 +262,7 @@
     
     //    dispatch_semaphore_wait(imageUpdateSemaphore, DISPATCH_TIME_FOREVER);
     
+    // 等待图片更新
     if (dispatch_semaphore_wait(imageUpdateSemaphore, DISPATCH_TIME_NOW) != 0)
     {
         return NO;
@@ -263,9 +277,11 @@
             [currentTarget setCurrentlyReceivingMonochromeInput:NO];
             [currentTarget setInputSize:pixelSizeOfImage atIndex:textureIndexOfTarget];
             [currentTarget setInputFramebuffer:outputFramebuffer atIndex:textureIndexOfTarget];
+            // 通知下一个filter
             [currentTarget newFrameReadyAtTime:kCMTimeIndefinite atIndex:textureIndexOfTarget];
         }
         
+        // 设置更新完毕
         dispatch_semaphore_signal(imageUpdateSemaphore);
         
         if (completion != nil) {
@@ -280,6 +296,7 @@
 {
     [finalFilterInChain useNextFrameForImageCapture];
     [self processImageWithCompletionHandler:^{
+        // 从output中获取图片，base中的实现是空的
         UIImage *imageFromFilter = [finalFilterInChain imageFromCurrentFramebuffer];
         block(imageFromFilter);
     }];

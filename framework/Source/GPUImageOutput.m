@@ -268,6 +268,9 @@ void reportAvailableMemoryForGPUImage(NSString *tag)
     });
 }
 
+/**
+ * 删除所有的target
+ */
 - (void)removeAllTargets;
 {
     cachedMaximumOutputSize = CGSizeZero;
