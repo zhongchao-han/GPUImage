@@ -137,6 +137,8 @@
         // 设置背景颜色
         [self setBackgroundColorRed:0.0 green:0.0 blue:0.0 alpha:1.0];
         _fillMode = kGPUImageFillModePreserveAspectRatio;
+        
+        // 创建帧缓冲区,并附加默认的颜色缓冲区
         [self createDisplayFramebuffer];
     });
 }
@@ -148,8 +150,11 @@
     if (!CGSizeEqualToSize(self.bounds.size, boundsSizeAtFrameBufferEpoch) &&
         !CGSizeEqualToSize(self.bounds.size, CGSizeZero)) {
         runSynchronouslyOnVideoProcessingQueue(^{
+            // 销毁帧缓冲区
             [self destroyDisplayFramebuffer];
+            // 创建用于展示的帧缓冲区
             [self createDisplayFramebuffer];
+            // 创建顶点
             [self recalculateViewGeometry];
         });
     }
@@ -169,12 +174,15 @@
 {
     [GPUImageContext useImageProcessingContext];
     
+    // 使用frame buffer对象
     glGenFramebuffers(1, &displayFramebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, displayFramebuffer);
 	
+    // 使用rander buffer对象
     glGenRenderbuffers(1, &displayRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
 	
+    // render buffer的存储直接指向CALayer
     [[[GPUImageContext sharedImageProcessingContext] context] renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
 	
     GLint backingWidth, backingHeight;
@@ -193,6 +201,7 @@
 
 //    NSLog(@"Backing width: %d, height: %d", backingWidth, backingHeight);
 
+    // 绑定到默认的颜色缓存区
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, displayRenderbuffer);
 	
     GLuint framebufferCreationStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -224,8 +233,10 @@
         [self createDisplayFramebuffer];
     }
     
+    // 使用frame buffer
     glBindFramebuffer(GL_FRAMEBUFFER, displayFramebuffer);
     
+    // 为帧缓冲区设置视口
     glViewport(0, 0, (GLint)_sizeInPixels.width, (GLint)_sizeInPixels.height);
 }
 
@@ -248,6 +259,7 @@
         //    CGFloat imageAspectRatio = inputImageSize.width / inputImageSize.height;
         //    CGFloat viewAspectRatio = currentViewSize.width / currentViewSize.height;
         
+        // 创建一个不超过大小的rect
         CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(inputImageSize, self.bounds);
         
         switch(_fillMode)
@@ -270,6 +282,7 @@
             }; break;
         }
         
+        // 创建4个顶点
         imageVertices[0] = -widthScaling;
         imageVertices[1] = -heightScaling;
         imageVertices[2] = widthScaling;
@@ -381,20 +394,32 @@
 {
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext setActiveShaderProgram:displayProgram];
+        
+        // 启用帧缓冲区
         [self setDisplayFramebuffer];
         
+        // 清除窗口
         glClearColor(backgroundColorRed, backgroundColorGreen, backgroundColorBlue, backgroundColorAlpha);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
+        // 将纹理绑定到纹理单元4
         glActiveTexture(GL_TEXTURE4);
         glBindTexture(GL_TEXTURE_2D, [inputFramebufferForDisplay texture]);
+        // 设置uniform参数为4
         glUniform1i(displayInputTextureUniform, 4);
         
+        // 每个顶点有两部分组成
+        // 数组中每个顶点的类型是Float
+        // 不规范化
+        // 相邻两个元素间的偏移为0
         glVertexAttribPointer(displayPositionAttribute, 2, GL_FLOAT, 0, 0, imageVertices);
+        // 设置纹理坐标
         glVertexAttribPointer(displayTextureCoordinateAttribute, 2, GL_FLOAT, 0, 0, [GPUImageView textureCoordinatesForRotation:inputRotation]);
         
+        // 绘制剔除三角形，用4个顶点
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         
+        // 将render buffer的内容打到屏幕
         [self presentFramebuffer];
         [inputFramebufferForDisplay unlock];
         inputFramebufferForDisplay = nil;
