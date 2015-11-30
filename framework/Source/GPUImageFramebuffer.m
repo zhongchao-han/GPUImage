@@ -260,6 +260,9 @@ void dataProviderUnlockCallback (void *info, const void *data, size_t size);
     framebufferReferenceCount++;
 }
 
+/**
+ * 释放本GPUImageFramebuffer,如果没有地方在引用。就放回缓存
+ */
 - (void)unlock;
 {
     if (referenceCountingDisabled)

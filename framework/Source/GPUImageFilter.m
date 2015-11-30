@@ -311,26 +311,32 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
     // 使用本filter Program
     [GPUImageContext setActiveShaderProgram:filterProgram];
 
+    // 创建包含纹理对象的outputFrameBuffer
     outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self sizeOfFBO] textureOptions:self.outputTextureOptions onlyTexture:NO];
     [outputFramebuffer activateFramebuffer];
     if (usingNextFrameForImageCapture)
     {
         [outputFramebuffer lock];
     }
-
+    
     [self setUniformsForProgramAtIndex:0];
     
+    // 清除屏幕
     glClearColor(backgroundColorRed, backgroundColorGreen, backgroundColorBlue, backgroundColorAlpha);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // 使用纹理
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, [firstInputFramebuffer texture]);
 	
+    // 设置filterInputTextureUniform的值
 	glUniform1i(filterInputTextureUniform, 2);	
 
+    // 设置filterPositionAttribute和filterTextureCoordinateAttribute的值
     glVertexAttribPointer(filterPositionAttribute, 2, GL_FLOAT, 0, 0, vertices);
 	glVertexAttribPointer(filterTextureCoordinateAttribute, 2, GL_FLOAT, 0, 0, textureCoordinates);
     
+    // 绘制源
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     [firstInputFramebuffer unlock];
@@ -341,6 +347,9 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
     }
 }
 
+/**
+ * 通知下一个环节，数据可用
+ */
 - (void)informTargetsAboutNewFrameAtTime:(CMTime)frameTime;
 {
     if (self.frameProcessingCompletionBlock != NULL)
@@ -356,12 +365,15 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
             NSInteger indexOfObject = [targets indexOfObject:currentTarget];
             NSInteger textureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
 
+            // 将自己的outFrameBuffer传递给下一个filter
             [self setInputFramebufferForTarget:currentTarget atIndex:textureIndex];
+            // 将大小传递给下一个filter
             [currentTarget setInputSize:[self outputFrameSize] atIndex:textureIndex];
         }
     }
     
     // Release our hold so it can return to the cache immediately upon processing
+    // 释放自己的FrameBuffer
     [[self framebufferForOutput] unlock];
     
     if (usingNextFrameForImageCapture)
@@ -380,6 +392,8 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
         {
             NSInteger indexOfObject = [targets indexOfObject:currentTarget];
             NSInteger textureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
+            
+            // 通知下一个节点进行处理
             [currentTarget newFrameReadyAtTime:frameTime atIndex:textureIndex];
         }
     }
@@ -559,6 +573,7 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
 - (void)setUniformsForProgramAtIndex:(NSUInteger)programIndex;
 {
     [uniformStateRestorationBlocks enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+        // 循环调用状态恢复block
         dispatch_block_t currentBlock = obj;
         currentBlock();
     }];
@@ -567,6 +582,9 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
 #pragma mark -
 #pragma mark GPUImageInput
 
+/**
+ * 收到上一级的通知
+ */
 - (void)newFrameReadyAtTime:(CMTime)frameTime atIndex:(NSInteger)textureIndex;
 {
     static const GLfloat imageVertices[] = {
@@ -576,8 +594,10 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
         1.0f,  1.0f,
     };
     
+    // 处理中间数据
     [self renderToTextureWithVertices:imageVertices textureCoordinates:[[self class] textureCoordinatesForRotation:inputRotation]];
-
+    
+    // 通知下一个filter
     [self informTargetsAboutNewFrameAtTime:frameTime];
 }
 
@@ -586,6 +606,9 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
     return 0;
 }
 
+/**
+ * 上一个filter通过这个方法传递GPUImageFramebuffer对象
+ */
 - (void)setInputFramebuffer:(GPUImageFramebuffer *)newInputFramebuffer atIndex:(NSInteger)textureIndex;
 {
     firstInputFramebuffer = newInputFramebuffer;
@@ -741,6 +764,9 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
      */
 }
 
+/**
+ * 结束处理
+ */
 - (void)endProcessing 
 {
     if (!isEndProcessing)
