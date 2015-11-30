@@ -49,6 +49,7 @@ void dataProviderUnlockCallback (void *info, const void *data, size_t size);
     if (_missingFramebuffer)
     {
         runSynchronouslyOnVideoProcessingQueue(^{
+            // 如果只是普通的纹理，就使用图片处理上下文
             [GPUImageContext useImageProcessingContext];
             [self generateTexture];
             framebuffer = 0;

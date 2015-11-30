@@ -70,16 +70,20 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
     backgroundColorGreen = 0.0;
     backgroundColorBlue = 0.0;
     backgroundColorAlpha = 0.0;
+    
+    // 图片抓取信号
     imageCaptureSemaphore = dispatch_semaphore_create(0);
     dispatch_semaphore_signal(imageCaptureSemaphore);
 
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext useImageProcessingContext];
 
+        // 创建program
         filterProgram = [[GPUImageContext sharedImageProcessingContext] programForVertexShaderString:vertexShaderString fragmentShaderString:fragmentShaderString];
         
         if (!filterProgram.initialized)
         {
+            // 显式设置attr与index
             [self initializeAttributes];
             
             if (![filterProgram link])
@@ -95,12 +99,17 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
             }
         }
         
+        // 获取attr下标
         filterPositionAttribute = [filterProgram attributeIndex:@"position"];
         filterTextureCoordinateAttribute = [filterProgram attributeIndex:@"inputTextureCoordinate"];
+        
+        // 获取uniform下标
         filterInputTextureUniform = [filterProgram uniformIndex:@"inputImageTexture"]; // This does assume a name of "inputImageTexture" for the fragment shader
         
+        // 使用program
         [GPUImageContext setActiveShaderProgram:filterProgram];
         
+        // enable attr
         glEnableVertexAttribArray(filterPositionAttribute);
         glEnableVertexAttribArray(filterTextureCoordinateAttribute);    
     });
@@ -143,6 +152,7 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
 
 - (void)initializeAttributes;
 {
+    // 显式绑定attr名称与index
     [filterProgram addAttribute:@"position"];
 	[filterProgram addAttribute:@"inputTextureCoordinate"];
 
@@ -190,6 +200,7 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
         return NULL;
     }
 
+    // 从gpuImageFrameBuffer中获取图片
     GPUImageFramebuffer* framebuffer = [self framebufferForOutput];
     
     usingNextFrameForImageCapture = NO;
@@ -297,6 +308,7 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
         return;
     }
     
+    // 使用本filter Program
     [GPUImageContext setActiveShaderProgram:filterProgram];
 
     outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self sizeOfFBO] textureOptions:self.outputTextureOptions onlyTexture:NO];
