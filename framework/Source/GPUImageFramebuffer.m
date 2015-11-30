@@ -319,6 +319,8 @@ void dataProviderUnlockCallback (void *info, const void *data, size_t size)
     __block CGImageRef cgImageFromBytes;
     
     runSynchronouslyOnVideoProcessingQueue(^{
+        
+        // 得到图片上下文
         [GPUImageContext useImageProcessingContext];
         
         NSUInteger totalBytesForImage = (int)_size.width * (int)_size.height * 4;
@@ -344,9 +346,14 @@ void dataProviderUnlockCallback (void *info, const void *data, size_t size)
         }
         else
         {
+            // 绑定frame buffer，并设置视口
             [self activateFramebuffer];
+            
+            // 申请图片的内存空间
             rawImagePixels = (GLubyte *)malloc(totalBytesForImage);
+            // 将纹理读取到内存空间
             glReadPixels(0, 0, (int)_size.width, (int)_size.height, GL_RGBA, GL_UNSIGNED_BYTE, rawImagePixels);
+            // 创建data provider
             dataProvider = CGDataProviderCreateWithData(NULL, rawImagePixels, totalBytesForImage, dataProviderReleaseCallback);
             [self unlock]; // Don't need to keep this around anymore
         }
@@ -362,6 +369,7 @@ void dataProviderUnlockCallback (void *info, const void *data, size_t size)
         }
         else
         {
+            // 用dataProvider 创建image
             cgImageFromBytes = CGImageCreate((int)_size.width, (int)_size.height, 8, 32, 4 * (int)_size.width, defaultRGBColorSpace, kCGBitmapByteOrderDefault | kCGImageAlphaLast, dataProvider, NULL, NO, kCGRenderingIntentDefault);
         }
         

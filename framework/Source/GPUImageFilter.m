@@ -206,6 +206,7 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
     usingNextFrameForImageCapture = NO;
     dispatch_semaphore_signal(imageCaptureSemaphore);
     
+    // 从frame buffer中得到image
     CGImageRef image = [framebuffer newCGImageFromFramebufferContents];
     return image;
 }

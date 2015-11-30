@@ -15,6 +15,13 @@
 - (id)initWithImage:(UIImage *)newImageSource;
 - (id)initWithCGImage:(CGImageRef)newImageSource;
 - (id)initWithImage:(UIImage *)newImageSource smoothlyScaleOutput:(BOOL)smoothlyScaleOutput;
+
+/**
+ * 调整图片大小
+ * 调整图片格式到合法格式
+ * 将图片数据写入纹理
+ * 在图片处理上下文中，创建不在使用中的纹理对象
+ */
 - (id)initWithCGImage:(CGImageRef)newImageSource smoothlyScaleOutput:(BOOL)smoothlyScaleOutput;
 
 // Image rendering
