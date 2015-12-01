@@ -71,11 +71,15 @@ NSString *const kKSDoNotingShaderString = SHADER_STRING(
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
-    CGSize renderBufferSize = [self outputFrameSize];
-    for (KSImagePicture *picture in self.pictures) {
-        
+    GLboolean isBlend;
+    glGetBooleanv(GL_BLEND, &isBlend);
+    if (!isBlend) {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+    
+    CGSize renderBufferSize = [self outputFrameSize];
+    for (KSImagePicture *picture in self.pictures) {
         
         glBindTexture(GL_TEXTURE_2D, 0);
         glActiveTexture(GL_TEXTURE2);
@@ -100,6 +104,10 @@ NSString *const kKSDoNotingShaderString = SHADER_STRING(
         glVertexAttribPointer(filterTextureCoordinateAttribute, 2, GL_FLOAT, 0,
                               0, noRotationTextureCoordinates);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    }
+    
+    if (!isBlend) {
+        glDisable(GL_BLEND);
     }
     
     [firstInputFramebuffer unlock];
