@@ -83,7 +83,7 @@ NSString *const kKSStickerFragmentShaderString = SHADER_STRING
     glClearColor(backgroundColorRed, backgroundColorGreen, backgroundColorBlue, backgroundColorAlpha);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    // 使用纹理
+    // 使用纹理，将上一个framebuffer作为纹理绘制到当前的framebuffer
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, [firstInputFramebuffer texture]);
     
@@ -94,7 +94,25 @@ NSString *const kKSStickerFragmentShaderString = SHADER_STRING
     glVertexAttribPointer(filterPositionAttribute, 2, GL_FLOAT, 0, 0, vertices);
     glVertexAttribPointer(filterTextureCoordinateAttribute, 2, GL_FLOAT, 0, 0, textureCoordinates);
     
-    // 绘制源
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    
+    // 解除当前纹理的绑定
+//    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    static const GLfloat imageVertices[] = {
+        -0.5f, -0.5f,
+        0.5f, -0.5f,
+        -0.5f,  0.5f,
+        0.5f,  0.5f,
+    };
+    static const GLfloat noRotationTextureCoordinates[] = {
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 1.0f,
+    };
+    glVertexAttribPointer(filterPositionAttribute, 2, GL_FLOAT, 0, 0, imageVertices);
+    glVertexAttribPointer(filterTextureCoordinateAttribute, 2, GL_FLOAT, 0, 0, noRotationTextureCoordinates);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     [firstInputFramebuffer unlock];
