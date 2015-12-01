@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8AA7FD3B1C0DCE5700AC038A /* KSImagePicture.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AA7FD3A1C0DCE5700AC038A /* KSImagePicture.m */; };
+		8AA7FD401C0DCF6600AC038A /* KSPictureOperationFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AA7FD3F1C0DCF6600AC038A /* KSPictureOperationFilter.m */; };
+		8AA7FD421C0DD8D600AC038A /* mmhudiejie.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AA7FD411C0DD8D600AC038A /* mmhudiejie.png */; };
+		8AA7FD481C0DDBE500AC038A /* GPUImageOutput+KSAddtion.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AA7FD471C0DDBE500AC038A /* GPUImageOutput+KSAddtion.m */; };
 		8AE5BA721C0C7650009EE14E /* KSStickersFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AE5BA711C0C7650009EE14E /* KSStickersFilter.m */; };
 		BCB3C42016BCA7B7003D26B0 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = BCB3C41B16BCA7B7003D26B0 /* Icon-72.png */; };
 		BCB3C42116BCA7B7003D26B0 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BCB3C41C16BCA7B7003D26B0 /* Icon-72@2x.png */; };
@@ -57,6 +61,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8AA7FD391C0DCE5700AC038A /* KSImagePicture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSImagePicture.h; sourceTree = "<group>"; };
+		8AA7FD3A1C0DCE5700AC038A /* KSImagePicture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KSImagePicture.m; sourceTree = "<group>"; };
+		8AA7FD3E1C0DCF6600AC038A /* KSPictureOperationFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSPictureOperationFilter.h; sourceTree = "<group>"; };
+		8AA7FD3F1C0DCF6600AC038A /* KSPictureOperationFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KSPictureOperationFilter.m; sourceTree = "<group>"; };
+		8AA7FD411C0DD8D600AC038A /* mmhudiejie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mmhudiejie.png; sourceTree = "<group>"; };
+		8AA7FD461C0DDBE500AC038A /* GPUImageOutput+KSAddtion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GPUImageOutput+KSAddtion.h"; sourceTree = "<group>"; };
+		8AA7FD471C0DDBE500AC038A /* GPUImageOutput+KSAddtion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GPUImageOutput+KSAddtion.m"; sourceTree = "<group>"; };
 		8AE5BA701C0C7650009EE14E /* KSStickersFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSStickersFilter.h; sourceTree = "<group>"; };
 		8AE5BA711C0C7650009EE14E /* KSStickersFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KSStickersFilter.m; sourceTree = "<group>"; };
 		BCB3C41B16BCA7B7003D26B0 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../../SharedIcons/Icon-72.png"; sourceTree = "<group>"; };
@@ -149,9 +160,16 @@
 				BCB5E7FC14E605A900701302 /* SimpleImageAppDelegate.m */,
 				BCB5E80414E605A900701302 /* SimpleImageViewController.h */,
 				BCB5E80514E605A900701302 /* SimpleImageViewController.m */,
+				8AA7FD411C0DD8D600AC038A /* mmhudiejie.png */,
 				BCB5E7F314E605A900701302 /* Supporting Files */,
 				8AE5BA701C0C7650009EE14E /* KSStickersFilter.h */,
 				8AE5BA711C0C7650009EE14E /* KSStickersFilter.m */,
+				8AA7FD391C0DCE5700AC038A /* KSImagePicture.h */,
+				8AA7FD3A1C0DCE5700AC038A /* KSImagePicture.m */,
+				8AA7FD3E1C0DCF6600AC038A /* KSPictureOperationFilter.h */,
+				8AA7FD3F1C0DCF6600AC038A /* KSPictureOperationFilter.m */,
+				8AA7FD461C0DDBE500AC038A /* GPUImageOutput+KSAddtion.h */,
+				8AA7FD471C0DDBE500AC038A /* GPUImageOutput+KSAddtion.m */,
 			);
 			path = SimpleImageFilter;
 			sourceTree = "<group>";
@@ -264,6 +282,7 @@
 				E5066F511855A9F2008C7682 /* Default-568h@2x.png in Resources */,
 				BCB5E86514E6F1D700701302 /* Lambeau.jpg in Resources */,
 				BCB3C42016BCA7B7003D26B0 /* Icon-72.png in Resources */,
+				8AA7FD421C0DD8D600AC038A /* mmhudiejie.png in Resources */,
 				BCC9005F18DA278200A5A5C7 /* lookup_amatorka.png in Resources */,
 				BCB3C42116BCA7B7003D26B0 /* Icon-72@2x.png in Resources */,
 				BCB3C42216BCA7B7003D26B0 /* Icon.png in Resources */,
@@ -279,7 +298,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8AA7FD3B1C0DCE5700AC038A /* KSImagePicture.m in Sources */,
 				BCB5E7F914E605A900701302 /* main.m in Sources */,
+				8AA7FD401C0DCF6600AC038A /* KSPictureOperationFilter.m in Sources */,
+				8AA7FD481C0DDBE500AC038A /* GPUImageOutput+KSAddtion.m in Sources */,
 				8AE5BA721C0C7650009EE14E /* KSStickersFilter.m in Sources */,
 				BCB5E7FD14E605A900701302 /* SimpleImageAppDelegate.m in Sources */,
 				BCB5E80614E605A900701302 /* SimpleImageViewController.m in Sources */,

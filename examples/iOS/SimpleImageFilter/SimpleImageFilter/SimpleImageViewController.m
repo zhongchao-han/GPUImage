@@ -1,5 +1,6 @@
 #import "SimpleImageViewController.h"
-#import "KSStickersFilter.h"
+#import "KSPictureOperationFilter.h"
+#import "KSImagePicture.h"
 
 @implementation SimpleImageViewController
 
@@ -72,7 +73,17 @@
     UIImage *inputImage = [UIImage imageNamed:@"WID-small.jpg"]; // The WID.jpg example is greater than 2048 pixels tall, so it fails on older devices
     
     sourcePicture = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:YES];
-    sepiaFilter = [[KSStickersFilter alloc] init];
+    sepiaFilter = [[KSPictureOperationFilter alloc] init];
+    
+    UIImage *image = [UIImage imageNamed:@"mmhudiejie"];
+    KSImagePicture *little = [[KSImagePicture alloc] initWithImage:image];
+    little.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+    [((KSPictureOperationFilter*)sepiaFilter).pictures addObject:little];
+    
+    UIImage *image1 = [UIImage imageNamed:@"mmhudiejie"];
+    KSImagePicture *little1 = [[KSImagePicture alloc] initWithImage:image1];
+    little1.frame = CGRectMake(0, -100, image.size.width, image.size.height);
+    [((KSPictureOperationFilter*)sepiaFilter).pictures addObject:little1];
     
     GPUImageView *imageView = (GPUImageView *)self.view;
     [sepiaFilter forceProcessingAtSize:imageView.sizeInPixels]; // This is now needed to make the filter run at the smaller output size

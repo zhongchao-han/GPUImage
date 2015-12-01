@@ -99,13 +99,13 @@ NSString *const kKSStickerFragmentShaderString = SHADER_STRING
     // 解除当前纹理的绑定
 //    glBindTexture(GL_TEXTURE_2D, 0);
     
-    static const GLfloat imageVertices[] = {
+    GLfloat imageVertices[] = {
         -0.5f, -0.5f,
         0.5f, -0.5f,
         -0.5f,  0.5f,
         0.5f,  0.5f,
     };
-    static const GLfloat noRotationTextureCoordinates[] = {
+    GLfloat noRotationTextureCoordinates[] = {
         0.0f, 0.0f,
         1.0f, 0.0f,
         0.0f, 1.0f,
