@@ -51,16 +51,6 @@ NSString *const kKSStickerFragmentShaderString = SHADER_STRING
     // 处理中间数据
     [self renderToTextureWithVertices:imageVertices textureCoordinates:[[self class] textureCoordinatesForRotation:inputRotation]];
     
-    static const GLfloat imageVertices1[] = {
-        -0.5f, -0.5f,
-        0.5f, -0.5f,
-        -0.5f,  0.5f,
-        0.5f,  0.5f,
-    };
-    
-    // 处理中间数据
-    [self renderToTextureWithVertices:imageVertices1 textureCoordinates:[[self class] textureCoordinatesForRotation:inputRotation]];
-    
     // 通知下一个filter
     [self informTargetsAboutNewFrameAtTime:frameTime];
 }
@@ -77,7 +67,10 @@ NSString *const kKSStickerFragmentShaderString = SHADER_STRING
     [GPUImageContext setActiveShaderProgram:filterProgram];
     
     // 创建包含纹理对象的outputFrameBuffer
+    // 每一个filter都用新的framebuffer
     outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self sizeOfFBO] textureOptions:self.outputTextureOptions onlyTexture:NO];
+    
+    // 激活framebuffer，下面的绘制将会绘制到这里
     [outputFramebuffer activateFramebuffer];
     if (usingNextFrameForImageCapture)
     {

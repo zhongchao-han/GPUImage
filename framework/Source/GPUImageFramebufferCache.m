@@ -80,6 +80,10 @@
     }
 }
 
+/**
+ * 它是尽量不创建新的framebuffer。
+ * 说明framebuffer的创建是非常消耗资源的
+ */
 - (GPUImageFramebuffer *)fetchFramebufferForSize:(CGSize)framebufferSize textureOptions:(GPUTextureOptions)textureOptions onlyTexture:(BOOL)onlyTexture;
 {
     __block GPUImageFramebuffer *framebufferFromCache = nil;
