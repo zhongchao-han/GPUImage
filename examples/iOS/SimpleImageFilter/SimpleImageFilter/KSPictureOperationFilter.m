@@ -86,10 +86,10 @@ NSString *const kKSDoNotingShaderString = SHADER_STRING(
         glBindTexture(GL_TEXTURE_2D, picture.pictureFrameBuffer.texture);
         
         GLfloat imageVertices[] = {
-            picture.frame.origin.x/renderBufferSize.width - 0.5, picture.frame.origin.y/renderBufferSize.height - 0.5,
-            (picture.frame.origin.x+picture.frame.size.width)/renderBufferSize.width - 0.5, picture.frame.origin.y/renderBufferSize.height - 0.5,
-            picture.frame.origin.x/renderBufferSize.width - 0.5, (picture.frame.origin.y+picture.frame.size.height)/renderBufferSize.height - 0.5,
-            (picture.frame.origin.x+picture.frame.size.width)/renderBufferSize.width - 0.5, (picture.frame.origin.y+picture.frame.size.height)/renderBufferSize.height - 0.5,
+            picture.frame.origin.x/renderBufferSize.width - 1., picture.frame.origin.y/renderBufferSize.height - 1.,
+            (picture.frame.origin.x+picture.frame.size.width)/renderBufferSize.width - 1., picture.frame.origin.y/renderBufferSize.height - 1.,
+            picture.frame.origin.x/renderBufferSize.width - 1., (picture.frame.origin.y+picture.frame.size.height)/renderBufferSize.height - 1.,
+            (picture.frame.origin.x+picture.frame.size.width)/renderBufferSize.width - 1., (picture.frame.origin.y+picture.frame.size.height)/renderBufferSize.height - 1.,
         };
         
         static const GLfloat noRotationTextureCoordinates[] = {

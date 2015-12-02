@@ -75,14 +75,14 @@
     sourcePicture = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:YES];
     sepiaFilter = [[KSPictureOperationFilter alloc] init];
     
-    UIImage *image = [UIImage imageNamed:@"mmhudiejie"];
+    UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"grimace_tear" ofType:@"jpg"]];
     KSImagePicture *little = [[KSImagePicture alloc] initWithImage:image];
     little.frame = CGRectMake(0, 0, image.size.width, image.size.height);
     [((KSPictureOperationFilter*)sepiaFilter).pictures addObject:little];
     
     UIImage *image1 = [UIImage imageNamed:@"mmhudiejie"];
     KSImagePicture *little1 = [[KSImagePicture alloc] initWithImage:image1];
-    little1.frame = CGRectMake(0, -100, image.size.width, image.size.height);
+    little1.frame = CGRectMake(little.frame.origin.x + little.frame.size.width, little.frame.origin.y + little.frame.size.height, image1.size.width*3., image1.size.height*3.);
     [((KSPictureOperationFilter*)sepiaFilter).pictures addObject:little1];
     
     GPUImageView *imageView = (GPUImageView *)self.view;

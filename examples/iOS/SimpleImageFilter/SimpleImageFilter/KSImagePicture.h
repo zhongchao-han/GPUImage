@@ -12,7 +12,7 @@
 
 /**
  * 图片在render buffer中的位置
- * 注意：坐标系和core graphic 的相同
+ * 注意：坐标系和UIView 的相同
  */
 @property(nonatomic, assign) CGRect frame;
 
