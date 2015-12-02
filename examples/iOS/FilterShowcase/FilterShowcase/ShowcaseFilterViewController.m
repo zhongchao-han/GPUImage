@@ -1745,8 +1745,10 @@
 
     NSLog(@"Face Detector %@", [self.faceDetector description]);
     NSLog(@"converted Image %@", [convertedImage description]);
+    NSDate *s = NSDate.date;
     NSArray *features = [self.faceDetector featuresInImage:convertedImage options:imageOptions];
-    
+    NSDate *e = NSDate.date;
+    NSLog(@"***cost:%f",e.timeIntervalSince1970 - s.timeIntervalSince1970);
     
     // get the clean aperture
     // the clean aperture is a rectangle that defines the portion of the encoded pixel dimensions
