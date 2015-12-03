@@ -1,6 +1,7 @@
 #import "SimpleImageViewController.h"
 #import "KSPictureOperationFilter.h"
 #import "KSImagePicture.h"
+#import "KSMutiBulgeDistortionFilter.h"
 
 @implementation SimpleImageViewController
 
@@ -73,17 +74,17 @@
     UIImage *inputImage = [UIImage imageNamed:@"WID-small.jpg"]; // The WID.jpg example is greater than 2048 pixels tall, so it fails on older devices
     
     sourcePicture = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:YES];
-    sepiaFilter = [[KSPictureOperationFilter alloc] init];
+    sepiaFilter = [[KSMutiBulgeDistortionFilter alloc] init];
     
-    UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"grimace_tear" ofType:@"jpg"]];
-    KSImagePicture *little = [[KSImagePicture alloc] initWithImage:image];
-    little.frame = CGRectMake(0, 0, image.size.width, image.size.height);
-    [((KSPictureOperationFilter*)sepiaFilter).pictures addObject:little];
+//    UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"grimace_tear" ofType:@"jpg"]];
+//    KSImagePicture *little = [[KSImagePicture alloc] initWithImage:image];
+//    little.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+//    [((KSPictureOperationFilter*)sepiaFilter).pictures addObject:little];
     
-    UIImage *image1 = [UIImage imageNamed:@"mmhudiejie"];
-    KSImagePicture *little1 = [[KSImagePicture alloc] initWithImage:image1];
-    little1.frame = CGRectMake(little.frame.origin.x + little.frame.size.width, little.frame.origin.y + little.frame.size.height, image1.size.width*3., image1.size.height*3.);
-    [((KSPictureOperationFilter*)sepiaFilter).pictures addObject:little1];
+//    UIImage *image1 = [UIImage imageNamed:@"mmhudiejie"];
+//    KSImagePicture *little1 = [[KSImagePicture alloc] initWithImage:image1];
+//    little1.frame = CGRectMake(little.frame.origin.x + little.frame.size.width, little.frame.origin.y + little.frame.size.height, image1.size.width*3., image1.size.height*3.);
+//    [((KSPictureOperationFilter*)sepiaFilter).pictures addObject:little1];
     
     GPUImageView *imageView = (GPUImageView *)self.view;
     [sepiaFilter forceProcessingAtSize:imageView.sizeInPixels]; // This is now needed to make the filter run at the smaller output size

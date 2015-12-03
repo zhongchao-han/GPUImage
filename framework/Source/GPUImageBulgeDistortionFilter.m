@@ -11,7 +11,7 @@ NSString *const kGPUImageBulgeDistortionFragmentShaderString = SHADER_STRING
  uniform highp vec2 center;
  uniform highp float radius;
  uniform highp float scale;
-
+ 
  void main()
  {
     highp vec2 textureCoordinateToUse = vec2(textureCoordinate.x, (textureCoordinate.y * aspectRatio + 0.5 - 0.5 * aspectRatio));

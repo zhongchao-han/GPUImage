@@ -12,6 +12,7 @@
 		8AA7FD401C0DCF6600AC038A /* KSPictureOperationFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AA7FD3F1C0DCF6600AC038A /* KSPictureOperationFilter.m */; };
 		8AA7FD421C0DD8D600AC038A /* mmhudiejie.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AA7FD411C0DD8D600AC038A /* mmhudiejie.png */; };
 		8AA7FD481C0DDBE500AC038A /* GPUImageOutput+KSAddtion.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AA7FD471C0DDBE500AC038A /* GPUImageOutput+KSAddtion.m */; };
+		8ACC92C91C0FD96B00B1467B /* KSMutiBulgeDistortionFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ACC92C81C0FD96B00B1467B /* KSMutiBulgeDistortionFilter.m */; };
 		8AE5BA721C0C7650009EE14E /* KSStickersFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AE5BA711C0C7650009EE14E /* KSStickersFilter.m */; };
 		BCB3C42016BCA7B7003D26B0 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = BCB3C41B16BCA7B7003D26B0 /* Icon-72.png */; };
 		BCB3C42116BCA7B7003D26B0 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BCB3C41C16BCA7B7003D26B0 /* Icon-72@2x.png */; };
@@ -70,6 +71,8 @@
 		8AA7FD411C0DD8D600AC038A /* mmhudiejie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mmhudiejie.png; sourceTree = "<group>"; };
 		8AA7FD461C0DDBE500AC038A /* GPUImageOutput+KSAddtion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GPUImageOutput+KSAddtion.h"; sourceTree = "<group>"; };
 		8AA7FD471C0DDBE500AC038A /* GPUImageOutput+KSAddtion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GPUImageOutput+KSAddtion.m"; sourceTree = "<group>"; };
+		8ACC92C71C0FD96B00B1467B /* KSMutiBulgeDistortionFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSMutiBulgeDistortionFilter.h; sourceTree = "<group>"; };
+		8ACC92C81C0FD96B00B1467B /* KSMutiBulgeDistortionFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KSMutiBulgeDistortionFilter.m; sourceTree = "<group>"; };
 		8AE5BA701C0C7650009EE14E /* KSStickersFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSStickersFilter.h; sourceTree = "<group>"; };
 		8AE5BA711C0C7650009EE14E /* KSStickersFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KSStickersFilter.m; sourceTree = "<group>"; };
 		BCB3C41B16BCA7B7003D26B0 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../../SharedIcons/Icon-72.png"; sourceTree = "<group>"; };
@@ -173,6 +176,8 @@
 				8AA7FD3F1C0DCF6600AC038A /* KSPictureOperationFilter.m */,
 				8AA7FD461C0DDBE500AC038A /* GPUImageOutput+KSAddtion.h */,
 				8AA7FD471C0DDBE500AC038A /* GPUImageOutput+KSAddtion.m */,
+				8ACC92C71C0FD96B00B1467B /* KSMutiBulgeDistortionFilter.h */,
+				8ACC92C81C0FD96B00B1467B /* KSMutiBulgeDistortionFilter.m */,
 			);
 			path = SimpleImageFilter;
 			sourceTree = "<group>";
@@ -303,6 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AA7FD3B1C0DCE5700AC038A /* KSImagePicture.m in Sources */,
+				8ACC92C91C0FD96B00B1467B /* KSMutiBulgeDistortionFilter.m in Sources */,
 				BCB5E7F914E605A900701302 /* main.m in Sources */,
 				8AA7FD401C0DCF6600AC038A /* KSPictureOperationFilter.m in Sources */,
 				8AA7FD481C0DDBE500AC038A /* GPUImageOutput+KSAddtion.m in Sources */,
